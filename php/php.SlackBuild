@@ -28,7 +28,7 @@
 
 
 VERSION=${VERSION:-$(echo php/php-*.tar.xz | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
-ALPINE=2.20
+ALPINE=2.21
 BUILD=${BUILD:-1}
 
 # Automatically determine the architecture we're building on:
@@ -140,10 +140,14 @@ sed -i "s|build\"$|php/build\"|" scripts/phpize.in
 
 # Generic "kitchen sink" configure function, with as many things as possible (and
 # maybe then some ;-) compiled as shared extensions:
+ICU_CONFIG="/usr/bin/icu-config" \
+EXTRA_LIBS="-lodbc" \
 EXTENSION_DIR=/usr/lib${LIBDIRSUFFIX}/php/extensions \
 CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
 ./configure \
   --prefix=/usr \
+  --includedir=/usr/include \
   --libdir=/usr/lib${LIBDIRSUFFIX} \
   --with-libdir=lib${LIBDIRSUFFIX} \
   --localstatedir=/var \
@@ -202,11 +206,11 @@ CFLAGS="$SLKCFLAGS" \
   --enable-hash \
   --with-mysqli=shared,mysqlnd \
   --with-mysql-sock=/var/run/mysql/mysql.sock \
-  --with-iodbc=shared,/usr \
+  --with-unixODBC=shared,/usr \
   --enable-pdo=shared \
   --with-pdo-mysql=shared,mysqlnd \
   --with-pdo-sqlite=shared,/usr \
-  --with-pdo-odbc=shared,iODBC,/usr \
+  --with-pdo-odbc=shared,unixODBC,/usr \
   --with-pspell=shared,/usr \
   --with-enchant=shared,/usr \
   --enable-shmop=shared \
@@ -223,11 +227,22 @@ CFLAGS="$SLKCFLAGS" \
   --enable-zip=shared \
   --with-tsrm-pthreads \
   --enable-intl=shared \
-  --enable-opcache \
+  --enable-opcache --enable-opcache-file \
   --enable-shared=yes \
   --enable-static=no \
   --with-gnu-ld \
   --with-pic \
+  --with-webp-dir=/usr \
+  --with-system-ciphers \
+  --with-mhash \
+  --with-xmlrpc=shared \
+  --with-ldap-sasl \
+  --without-readline \
+  --with-libedit \
+  --with-icu-dir=/usr \
+  --enable-mysqlnd=shared \
+  --enable-fileinfo=shared \
+  --enable-phar \
   --enable-phpdbg \
   --build=$ARCH-slackware-linux
 
@@ -306,5 +321,4 @@ cat $CWD/php/slack-desc > $PKG/install/slack-desc
 #fi
 
 cd $PKG
-/sbin/makepkg -l y -c n $TMP/php-$VERSION-$ARCH-$BUILD.txz
-
+/sbin/makepkg -l y -c n $TMP/php-$VERSION-$ARCH-${BUILD}_wls.txz
