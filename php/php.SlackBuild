@@ -7,7 +7,7 @@
 # All rights reserved.
 #
 # Modified for php 7.1.0RC1 by rumbler.soppa@rellcom.com.br
-#
+# Modified 2017-08-04 17:06 UTC by Widya Walesa
 #
 # Redistribution and use of this script, with or without modification, is
 # permitted provided that the following conditions are met:
@@ -30,6 +30,10 @@
 VERSION=${VERSION:-$(echo php/php-*.tar.xz | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
 ALPINE=2.21
 BUILD=${BUILD:-1}
+
+# Use one of iodbc or unixODBC
+USE_ODBC=${USE_ODBC:-iodbc}
+
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -206,11 +210,10 @@ CXXFLAGS="$SLKCFLAGS" \
   --enable-hash \
   --with-mysqli=shared,mysqlnd \
   --with-mysql-sock=/var/run/mysql/mysql.sock \
-  --with-unixODBC=shared,/usr \
   --enable-pdo=shared \
   --with-pdo-mysql=shared,mysqlnd \
   --with-pdo-sqlite=shared,/usr \
-  --with-pdo-odbc=shared,unixODBC,/usr \
+  --with-pdo-odbc=shared,$USE_ODBC,/usr \
   --with-pspell=shared,/usr \
   --with-enchant=shared,/usr \
   --enable-shmop=shared \
@@ -218,7 +221,6 @@ CXXFLAGS="$SLKCFLAGS" \
   --enable-soap=shared \
   --enable-sockets \
   --with-sqlite3=shared \
-  --with-mssql=shared,/usr \
   --enable-sysvmsg \
   --enable-sysvsem \
   --enable-sysvshm \
@@ -240,6 +242,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --without-readline \
   --with-libedit \
   --with-icu-dir=/usr \
+  --with-$USE_ODBC=shared,/usr \
   --enable-mysqlnd=shared \
   --enable-fileinfo=shared \
   --enable-phar \
