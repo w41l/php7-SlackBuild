@@ -7,7 +7,7 @@
 # All rights reserved.
 #
 # Modified for php 7.1.0RC1 by rumbler.soppa@rellcom.com.br
-# Modified 2017-08-04 17:06 UTC by Widya Walesa
+#
 #
 # Redistribution and use of this script, with or without modification, is
 # permitted provided that the following conditions are met:
@@ -27,13 +27,8 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-VERSION=${VERSION:-$(echo php/php-*.tar.xz | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
-ALPINE=2.21
+VERSION=${VERSION:-$(echo php-*.tar.xz | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
 BUILD=${BUILD:-1}
-
-# Use one of iodbc or unixODBC
-USE_ODBC=${USE_ODBC:-iodbc}
-
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -80,7 +75,8 @@ if [ -r $IMAPLIBDIR/lib${LIBDIRSUFFIX}/c-client.a ]; then
   ls -l $IMAPLIBDIR/lib${LIBDIRSUFFIX}/c-client.a
   sleep 5
 else
-  ( cd $CWD/alpine ; ./alpine.SlackBuild || exit 1 ) || exit 1
+  ALPINE=${ALPINE:-$(echo $CWD/../alpine/alpine-*.tar.xz | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
+  ( cd $CWD/../alpine ; ./alpine.SlackBuild || exit 1 ) || exit 1
   ( cd $TMP/alpine-${ALPINE}/imap/c-client
     strip -g c-client.a
     mkdir -p $IMAPLIBDIR/lib${LIBDIRSUFFIX}
@@ -102,7 +98,7 @@ fi
 
 cd $TMP
 rm -rf php-$VERSION
-tar xvf $CWD/php/php-$VERSION.tar.?z || exit 1
+tar xvf $CWD/php-$VERSION.tar.?z || exit 1
 cd php-$VERSION
 
 # cleanup:
@@ -111,13 +107,13 @@ find . -name "*.orig" -delete
 # Add missing(?) PEAR modules back:
 if [ -d php-$VERSION/pear/packages ]; then
   ( cd php-$VERSION/pear/packages
-    cp -a $CWD/php/pear/*.bz2 . 2> /dev/null
+    cp -a $CWD/pear/*.bz2 . 2> /dev/null
     bzip2 -d *.bz2 2> /dev/null
   )
 fi
 
 if [ "$ARCH" = "s390" ]; then
-  zcat $CWD/php/php.configure.s390.diff.gz | patch -p1 || exit
+  zcat $CWD/php.configure.s390.diff.gz | patch -p1 || exit
 fi
 
 # Fixup perms/owners:
@@ -134,16 +130,14 @@ find . -name "*.h" -exec chmod 644 {} \;
 find . -name "*.orig" -exec rm {} \;
 
 # Patch ini files:
-zcat $CWD/php/php.ini-development.diff.gz | patch -p1 --verbose php.ini-development || exit 1
-zcat $CWD/php/php.ini-development.diff.gz | patch -p1 --verbose php.ini-production || exit 1
+zcat $CWD/php.ini-development.diff.gz | patch -p1 --verbose php.ini-development || exit 1
+zcat $CWD/php.ini-development.diff.gz | patch -p1 --verbose php.ini-production || exit 1
 
 # Install the build folder into /usr/lib$LIBDIRSUFFIX/php/build
 # and adapt phpize accordingly:
 sed -i "s|build$|php/build|" scripts/Makefile.frag
 sed -i "s|build\"$|php/build\"|" scripts/phpize.in
 
-# Generic "kitchen sink" configure function, with as many things as possible (and
-# maybe then some ;-) compiled as shared extensions:
 ICU_CONFIG="/usr/bin/icu-config" \
 EXTRA_LIBS="-lodbc" \
 EXTENSION_DIR=/usr/lib${LIBDIRSUFFIX}/php/extensions \
@@ -208,12 +202,13 @@ CXXFLAGS="$SLKCFLAGS" \
   --with-ldap=shared \
   --enable-mbstring=shared \
   --enable-hash \
-  --with-mysqli=shared,mysqlnd \
-  --with-mysql-sock=/var/run/mysql/mysql.sock \
   --enable-pdo=shared \
   --with-pdo-mysql=shared,mysqlnd \
   --with-pdo-sqlite=shared,/usr \
-  --with-pdo-odbc=shared,$USE_ODBC,/usr \
+  --with-pdo-odbc=shared,unixODBC,/usr \
+  --with-mysql=mysqlnd \
+  --with-mysqli=mysqlnd \
+  --with-mysql-sock=/var/run/mysql/mysql.sock \
   --with-pspell=shared,/usr \
   --with-enchant=shared,/usr \
   --enable-shmop=shared \
@@ -242,8 +237,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --without-readline \
   --with-libedit \
   --with-icu-dir=/usr \
-  --with-$USE_ODBC=shared,/usr \
-  --enable-mysqlnd=shared \
+  --with-unixODBC=shared,/usr \
   --enable-fileinfo=shared \
   --enable-phar \
   --enable-phpdbg \
@@ -291,7 +285,7 @@ chown -R root:root $PKG/usr/doc/php-$VERSION
 chmod 644 $PKG/usr/doc/php-$VERSION/UPGRADING*
 
 mkdir -p $PKG/etc/httpd
-cat $CWD/php/mod_php.conf.example | sed -e "s#lib/httpd#lib${LIBDIRSUFFIX}/httpd#" \
+cat $CWD/mod_php.conf.example | sed -e "s#lib/httpd#lib${LIBDIRSUFFIX}/httpd#" \
   > $PKG/etc/httpd/mod_php.conf.example
 chmod 644 $PKG/etc/httpd/*
 chown root:root $PKG/etc/httpd/*
@@ -315,8 +309,8 @@ find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
 gzip -9 $PKG/usr/man/man?/*.?
 
 mkdir -p $PKG/install
-zcat $CWD/php/doinst.sh.gz > $PKG/install/doinst.sh
-cat $CWD/php/slack-desc > $PKG/install/slack-desc
+zcat $CWD/doinst.sh.gz > $PKG/install/doinst.sh
+cat $CWD/slack-desc > $PKG/install/slack-desc
 
 #if [ -d "$IMAPLIBDIR" ]; then
 #  ( cd $IMAPLIBDIR && rm -rf * )
@@ -325,3 +319,4 @@ cat $CWD/php/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
 /sbin/makepkg -l y -c n $TMP/php-$VERSION-$ARCH-${BUILD}_wls.txz
+

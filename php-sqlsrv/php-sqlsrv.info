@@ -1,0 +1,12 @@
+PRGNAM="php-sqlsrv"
+VERSION="4.3.0"
+HOMEPAGE="https://github.com/Microsoft/msphpsql"
+DOWNLOAD="https://pecl.php.net/get/sqlsrv-4.3.0.tgz \
+          https://pecl.php.net/get/pdo_sqlsrv-4.3.0.tgz"
+MD5SUM="e4b22e84d25a643e2d46c20a2e2334c5 \
+        8bb1924b83f5673d53fd2bb8cf9ea5d5"
+DOWNLOAD_x86_64=""
+MD5SUM_x86_64=""
+REQUIRES="unixODBC msodbcsql"
+MAINTAINER="Widya Walesa"
+EMAIL="walecha_99_[at]_gmail_[dot]_com"

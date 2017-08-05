@@ -1,0 +1,6 @@
+This extension enables PHP to connect to and use Microsoft SQLServer databases.
+
+To enable the sqlsrv extension for php, go to /etc/php.d/sqlsrv.ini
+and uncomment the line:
+  ; extension=sqlsrv.so
+  ; extension=pdo_sqlsrv.so
