@@ -48,10 +48,6 @@ Port=1433
 Database=
 User=
 Password=
-
-[ODBC Driver 13 for SQL Server]
-Description=Microsoft ODBC Driver 13 for SQL Server
-Driver=/opt/microsoft/msodbcsql/lib64/libmsodbcsql-13.1.so.9.0
 ```
 
 * Test DSN connection using:
