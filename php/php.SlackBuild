@@ -43,10 +43,10 @@ fi
 NUMJOBS=${NUMJOBS:-" -j7 "}
 
 CWD=$(pwd)
-TMP=${TMP:-/tmp}
-PKG=$TMP/package-php/
+WRK=${WRK:-/tmp}
+PKG=$WRK/package-php/
 rm -rf $PKG
-mkdir -p $TMP $PKG
+mkdir -p $WRK $PKG
 
 if [ "$ARCH" = "i386" ]; then
   SLKCFLAGS="-O2 -march=i386 -mcpu=i686"
@@ -77,7 +77,7 @@ if [ -r $IMAPLIBDIR/lib${LIBDIRSUFFIX}/c-client.a ]; then
 else
   ALPINE=${ALPINE:-$(echo $CWD/../alpine/alpine-*.tar.xz | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
   ( cd $CWD/../alpine ; ./alpine.SlackBuild || exit 1 ) || exit 1
-  ( cd $TMP/alpine-${ALPINE}/imap/c-client
+  ( cd $WRK/alpine-${ALPINE}/imap/c-client
     strip -g c-client.a
     mkdir -p $IMAPLIBDIR/lib${LIBDIRSUFFIX}
     cp c-client.a $IMAPLIBDIR/lib${LIBDIRSUFFIX}
@@ -96,7 +96,7 @@ if [ ! -e /etc/httpd/original/httpd.conf ]; then
   exit 1
 fi
 
-cd $TMP
+cd $WRK
 rm -rf php-$VERSION
 tar xvf $CWD/php-$VERSION.tar.?z || exit 1
 cd php-$VERSION
@@ -318,5 +318,5 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 #fi
 
 cd $PKG
-/sbin/makepkg -l y -c n $TMP/php-$VERSION-$ARCH-${BUILD}_wls.txz
+/sbin/makepkg -l y -c n /tmp/php-$VERSION-$ARCH-${BUILD}_wls.txz
 
