@@ -59,7 +59,7 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $PKG
-rpm2cpio $CWD/$PRGNAM-$VERSION.rpm | cpio -idmv
+rpm2cpio $CWD/$PRGNAM-$VERSION-1.${ARCH}.rpm | cpio -idmv
 
 chown -R root:root .
 find -L . \

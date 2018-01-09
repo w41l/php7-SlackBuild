@@ -41,8 +41,8 @@ fi
 NUMJOBS=${NUMJOBS:-" -j6 "}
 
 CWD=$(pwd)
-TMP=${TMP:-/tmp}
-PKG=$TMP/package-${PKGNAM}
+WRK=${WRK:-/tmp}
+PKG=$WRK/package-${PKGNAM}
 rm -rf $PKG
 mkdir -p $PKG/etc
 
@@ -54,7 +54,7 @@ elif [ "$ARCH" = "x86_64" ]; then
   SLKCFLAGS="-O2 -fPIC"
 fi
 
-cd $TMP
+cd $WRK
 rm -rf alpine-${VERSION}
 tar xvf $CWD/alpine-$VERSION.tar.xz || exit 1
 cd alpine-$VERSION || exit 1
@@ -111,7 +111,7 @@ cp -a \
   $PKG/usr/doc/${PKGNAM}-$VERSION
 
 # Add pinepgp support:
-cd $TMP
+cd $WRK
 rm -rf pinepgp-$PINEPGP
 tar xvf $CWD/pinepgp-$PINEPGP.tar.gz || exit 1
 cd pinepgp-$PINEPGP || exit 1
@@ -162,12 +162,12 @@ cat $CWD/doinst.sh.alpine > $PKG/install/doinst.sh
 cat $CWD/slack-desc.alpine > $PKG/install/slack-desc
 
 cd $PKG
-/sbin/makepkg -l y -c n $TMP/${PKGNAM}-$VERSION-$ARCH-$ALPINEBUILD.txz
+/sbin/makepkg -l y -c n /tmp/${PKGNAM}-$VERSION-$ARCH-$ALPINEBUILD.txz
 
 # As is customary, now build a package for the included IMAP and
 # POP3 daemons:
 PKG2=/tmp/package-imapd
-cd $TMP
+cd $WRK
 rm -rf $PKG2
 mkdir -p $PKG2
 cd alpine-$VERSION/imap || exit 1
@@ -194,5 +194,5 @@ find $PKG2 | xargs file | grep -e "executable" -e "shared object" \
 mkdir -p $PKG2/install
 cat $CWD/slack-desc.imapd > $PKG2/install/slack-desc
 cd $PKG2
-/sbin/makepkg -l y -c n $TMP/imapd-$VERSION-$ARCH-$IMAPDBUILD.txz
+/sbin/makepkg -l y -c n /tmp/imapd-$VERSION-$ARCH-$IMAPDBUILD.txz
 
