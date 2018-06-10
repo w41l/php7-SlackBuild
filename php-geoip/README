@@ -1,0 +1,5 @@
+This extension enables PHP to work with geoip.
+
+To enable the geoip extension for php, go to
+/etc/php.d/geoip.ini and uncomment the line:
+  ; extension=geoip.so
