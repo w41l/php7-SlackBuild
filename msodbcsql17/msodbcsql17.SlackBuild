@@ -24,6 +24,7 @@
 
 PRGNAM=msodbcsql17
 VERSION=17.1.0.1
+RHELOPENSSL=1.0.2k-12.el7
 BUILD=${BUILD:-1}
 TAG=${TAG:-_wls}
 
@@ -60,6 +61,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $PKG
 rpm2cpio $CWD/$PRGNAM-$VERSION-1.${ARCH}.rpm | cpio -idmv
+rpm2cpio $CWD/openssl-libs-${RHELOPENSSL}.${ARCH}.rpm | cpio -idmv
 
 chown -R root:root .
 find -L . \
@@ -68,8 +70,15 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
+mv usr/lib64/lib*.so.* opt/microsoft/msodbcsql17/lib64/
+sleep 1
+
+( cd opt/microsoft/msodbcsql17;
+  patchelf --set-rpath /opt/microsoft/msodbcsql17/lib64/ lib64/libmsodbcsql-*)
+
 mv usr/share/doc usr/
-rmdir usr/share
+rm -r usr/share usr/lib64 etc
+
 mv usr/doc/msodbcsql17 usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 

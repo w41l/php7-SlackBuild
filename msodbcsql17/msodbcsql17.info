@@ -3,8 +3,10 @@ VERSION="17.1.0.1"
 HOMEPAGE="https://blogs.msdn.microsoft.com/sqlnativeclient/"
 DOWNLOAD=""
 MD5SUM=""
-DOWNLOAD_x86_64="https://packages.microsoft.com/sles/12/prod/msodbcsql17-17.1.0.1-1.x86_64.rpm"
-MD5SUM_x86_64="96b7e11e02fb33c2aa998c41a126bd18"
+DOWNLOAD_x86_64="https://packages.microsoft.com/rhel/7.3/prod/msodbcsql17-17.1.0.1-1.x86_64.rpm
+		http://mirror.centos.org/centos/7/os/x86_64/Packages/openssl-libs-1.0.2k-12.el7.x86_64.rpm"
+MD5SUM_x86_64="c9d21c6b1ae88c4630603ac83ef6f38a
+              9a55a8ef95c8aba356b794a8e848b769"
 REQUIRES="unixODBC"
 MAINTAINER="Widya Walesa"
 EMAIL="walecha_99_[at]_gmail_[dot]_com"
