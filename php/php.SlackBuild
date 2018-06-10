@@ -40,7 +40,7 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-NUMJOBS=${NUMJOBS:-" -j7 "}
+NUMJOBS=${NUMJOBS:-" -j6 "}
 
 CWD=$(pwd)
 WRK=${WRK:-/tmp}
@@ -241,6 +241,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --enable-fileinfo=shared \
   --enable-phar \
   --enable-phpdbg \
+  --with-kerberos \
   --build=$ARCH-slackware-linux
 
 # I am told this option is worse than nothing.  :-)
