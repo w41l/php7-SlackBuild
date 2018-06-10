@@ -1,12 +1,12 @@
 PRGNAM="php-sqlsrv"
-VERSION="4.3.0"
+VERSION="5.2.0"
 HOMEPAGE="https://github.com/Microsoft/msphpsql"
-DOWNLOAD="https://pecl.php.net/get/sqlsrv-4.3.0.tgz \
-          https://pecl.php.net/get/pdo_sqlsrv-4.3.0.tgz"
-MD5SUM="e4b22e84d25a643e2d46c20a2e2334c5 \
-        8bb1924b83f5673d53fd2bb8cf9ea5d5"
+DOWNLOAD="https://pecl.php.net/get/sqlsrv-5.2.0.tgz \
+          https://pecl.php.net/get/pdo_sqlsrv-5.2.0.tgz"
+MD5SUM="fd40c02a3688c1920d06e36603ca6cae \
+        dd66a59de61d7c8cb50028a729c58812"
 DOWNLOAD_x86_64=""
 MD5SUM_x86_64=""
-REQUIRES="unixODBC msodbcsql"
+REQUIRES="unixODBC msodbcsql msodbcsql17"
 MAINTAINER="Widya Walesa"
 EMAIL="walecha_99_[at]_gmail_[dot]_com"
