@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.  Line
+# up the first '|' above the ':' following the base package name, and the '|' on
+# the right side marks the last column you can put a character in.  You must make
+# exactly 11 lines for the formatting to be correct.  It's also customary to
+# leave one space after the ':'.
+
+           |-----handy-ruler------------------------------------------------------|
+msodbcsql17: msodbcsql17 (Microsoft SQL Server ODBC Driver)
+msodbcsql17:
+msodbcsql17: This package contains the Microsoft ODBC driver for SQL server
+msodbcsql17:
+msodbcsql17: WARNING: By *installing* this binary driver you are accepting all
+msodbcsql17: condition and terms in /usr/doc/msodbcsql17-@VERSION@/LICENSE.txt
+msodbcsql17:
+msodbcsql17: Homepage: https://blogs.msdn.microsoft.com/sqlnativeclient/
+msodbcsql17:
+msodbcsql17:
+msodbcsql17:
