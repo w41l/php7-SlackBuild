@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.  Line
+# up the first '|' above the ':' following the base package name, and the '|' on
+# the right side marks the last column you can put a character in.  You must make
+# exactly 11 lines for the formatting to be correct.  It's also customary to
+# leave one space after the ':'.
+
+           |-----handy-ruler------------------------------------------------------|
+mssql-tools: mssql-tools (Microsoft SQL Server ODBC Tools)
+mssql-tools:
+mssql-tools: This package contains the Microsoft ODBC tools for SQL server
+mssql-tools:
+mssql-tools: WARNING: By *installing* this binary driver you are accepting all
+mssql-tools: condition and terms in /usr/doc/mssql-tools-@VERSION@/LICENSE.txt
+mssql-tools:
+mssql-tools: Homepage: https://blogs.msdn.microsoft.com/sqlnativeclient/
+mssql-tools:
+mssql-tools:
+mssql-tools:
