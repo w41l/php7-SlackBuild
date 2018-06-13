@@ -4,19 +4,20 @@ Installation Order
 This README explain how to get PHP7 works with Microsoft SQL Server.
 You can choose using FreeTDS or Microsoft SQL Server Native Client or both.
 
+
 FreeTDS
 =======
 
+* unixODBC
 * freetds
-* php
 * php-pdo_dblib
+
 
 Microsoft SQL Server Native Driver
 ==================================
 
 * unixODBC
-* msodbcsql
-* php
+* msodbcsql (msodbcsql17)
 * php-sqlsrv
 
 
@@ -34,7 +35,13 @@ NOTES
 * After installing msodbcsql you must install the ODBC driver (run as root):
 
   ```
-  odbcinst -i -s -f /opt/microsoft/msodbcsql/etc/odbcinst.ini -l
+  This for msodbcsql driver version 13:
+  
+  shell> odbcinst -i -s -f /opt/microsoft/msodbcsql/etc/odbcinst.ini -l
+  
+  This for msodbcsql driver version 17:
+  
+  shell> odbcinst -i -s -f /opt/microsoft/msodbcsql17/etc/odbcinst.ini -l
   ```
 
 * Add your sqlserver DSN in /etc/odbc.ini like this:
