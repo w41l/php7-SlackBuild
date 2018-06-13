@@ -23,7 +23,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=freetds
-VERSION=${VERSION:-1.00.64}
+VERSION=${VERSION:-1.00.91}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -86,6 +86,9 @@ CXXFLAGS="$SLKCFLAGS" \
 
 make $NUMJOBS || make || exit 1
 make install DESTDIR=$PKG TARGET_DOCDIR=$PKG/usr/doc/$PRGNAM-$VERSION
+
+# Don't ship .la files:
+rm -f $PKG/{,usr/}lib${LIBDIRSUFFIX}/*.la
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
